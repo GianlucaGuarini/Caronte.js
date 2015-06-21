@@ -6,8 +6,5 @@ branches:
   only:
     - master
 
-after_success:
-    - ./make saucelabs
-
 notifications:
     email: false

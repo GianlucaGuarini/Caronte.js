@@ -36,11 +36,6 @@ switch(command) {
   case 'test':
     test()
     break
-  case 'saucelabs':
-    test({
-      saucelabs: true
-    })
-    break
   default:
     eslint()
       .then(build)

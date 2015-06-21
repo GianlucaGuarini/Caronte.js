@@ -10,7 +10,6 @@
     "build": "node make build",
     "watch": "node make watch",
     "minify": "node make minify",
-    "saucelabs": "node make saucelabs",
     "default": "node make"
   },
   "keywords": [
@@ -53,7 +52,6 @@
     "karma-coverage": "^0.4.2",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.2.0",
-    "karma-sauce-launcher": "^0.2.11",
     "phantomjs": "^1.9.17",
     "node-libs-browser": "^0.5.2",
     "serve": "^1.4.0",
