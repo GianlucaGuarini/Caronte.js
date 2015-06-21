@@ -1,0 +1,73 @@
+{
+  "name": "caronte",
+  "version": "0.0.0-alpha",
+  "description": "Simple javascript ajax file uploader script made for the modern browsers",
+  "main": "index.js",
+  "scripts": {
+    "test": "node make test",
+    "serve": "node make serve",
+    "eslint": "node make eslint",
+    "build": "node make build",
+    "watch": "node make watch",
+    "minify": "node make minify",
+    "saucelabs": "node make saucelabs",
+    "default": "node make"
+  },
+  "keywords": [
+    "uploader",
+    "file uploader",
+    "ajax file upload"
+  ],
+  "devDependencies": {
+    "babel": "^5.5.8",
+    "babel-core": "^5.5.8",
+    "babel-loader": "^5.1.4",
+    "chai": "^3.0.0",
+    "chokidar": "^1.0.3",
+    "eslint": "^0.23.0",
+    "karma": "^0.12.36",
+    "karma-babel-preprocessor": "^5.2.1",
+    "karma-coverage": "^0.4.2",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "serve": "^1.4.0",
+    "sinon": "^1.15.3",
+    "sinon-chai": "^2.8.0",
+    "uglify-js": "^2.4.23",
+    "webpack": "^1.9.11"
+  },
+  "author": "Gianluca Guarini (http://gianlucaguarini.com/)",
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "babel": "^5.5.8",
+    "babel-core": "^5.5.8",
+    "chai": "^3.0.0",
+    "babel-loader": "^5.1.4",
+    "chokidar": "^1.0.3",
+    "eslint": "^0.23.0",
+    "karma-babel-preprocessor": "^5.2.1",
+    "karma": "^0.12.36",
+    "karma-coverage": "^0.4.2",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-sauce-launcher": "^0.2.11",
+    "phantomjs": "^1.9.17",
+    "node-libs-browser": "^0.5.2",
+    "serve": "^1.4.0",
+    "sinon": "^1.15.3",
+    "sinon-chai": "^2.8.0",
+    "uglify-js": "^2.4.23",
+    "webpack": "^1.9.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GianlucaGuarini/Caronte.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GianlucaGuarini/Caronte.js/issues"
+  },
+  "homepage": "https://github.com/GianlucaGuarini/Caronte.js#readme"
+}
