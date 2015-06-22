@@ -80,6 +80,16 @@ var spawn = require('child_process').spawn,
 
     },
     /**
+     * Read and concat multiple files
+     * @param  { Array } files
+     * @return { string } all the files concatenated
+     */
+    concat: function(files) {
+      return files.map(function(file){
+        return fs.readFileSync(file)
+      }).join('\n')
+    },
+    /**
      * Read all the files crawling starting from a certain folder path
      * @param  { string } path directory path
      * @param  { bool } mustDelete delete the files found

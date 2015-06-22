@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <form action="/">
+    <input type="file" multiple>
+    <button type="submit">Send</button>
+  </form>
+  <script src="../dist/Caronte.js"></script>
+  <script>
+    var uploader = new Caronte('form')
+    uploader.on('progress', function(perc){
+      console.log(perc)
+    })
+    uploader.on('error', function(error){
+      console.log(error)
+    })
+  </script>
+</body>
+</html>

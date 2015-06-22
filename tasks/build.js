@@ -10,10 +10,11 @@ module.exports = function() {
   // delete the old ./dist folder
   utils.clean('./dist')
 
-  var core = fs.readFileSync('src/index.js'),
+  var observable = fs.readFileSync('src/observable.js'),
+      core = fs.readFileSync('src/index.js'),
       start = fs.readFileSync('src/wrap/start.frag'),
       end = fs.readFileSync('src/wrap/end.frag'),
-      transpiled = babel.transform(core).code
+      transpiled = babel.transform(observable + core).code
 
   /**
    * Create a promise based on the result of the webpack compiling script
