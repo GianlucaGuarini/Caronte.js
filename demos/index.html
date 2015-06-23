@@ -4,8 +4,9 @@
   <title></title>
 </head>
 <body>
-  <form action="/">
-    <input type="file" multiple>
+  <h1>PHP</h1>
+  <form enctype="multipart/form-data" action="php/index.php" method="post">
+    <input name="files[]" type="file" multiple>
     <button type="submit">Send</button>
   </form>
   <script src="../dist/Caronte.js"></script>
@@ -14,8 +15,8 @@
     uploader.on('progress', function(perc){
       console.log(perc)
     })
-    uploader.on('error', function(error){
-      console.log(error)
+    uploader.on('success', function(res){
+      console.log(res)
     })
   </script>
 </body>
