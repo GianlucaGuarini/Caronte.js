@@ -84,7 +84,7 @@ var observable = function observable(el) {
 function Caronte(el, opts) {
   this.opts = opts;
   this.el = this._getElement(el);
-  if (!this.el) throw 'No form element found with the "' + opts.el + '"';
+  if (!this.el) throw 'No form element found with the "' + opts.el + '" selector';
   // make this class observable
   observable(this);
   // get the file input
@@ -124,20 +124,21 @@ Caronte.prototype = {
     var data = new FormData(e.target),
         xhr = new XMLHttpRequest();
 
+    this._total = 0;
+
     // get the total files size
     Array.prototype.forEach.call(this.input.files, function (file) {
-      _this._total = file.size;
+      _this._total += file.size;
     });
 
     // setup the ajax request
     xhr.open('post', this.el.getAttribute('action'), true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 
     // bind some listeners to the ajax request
-    xhr.upload.addEventListener('load', this._onXhrLoaded.bind(this), false);
-    xhr.upload.addEventListener('error', this._onXhrFailed.bind(this), false);
-    xhr.upload.addEventListener('abort', this._onXhrAborted.bind(this), false);
-    xhr.upload.addEventListener('progress', this._onXhrProgress.bind(this), false);
+    xhr.onreadystatechange = this._onXhrLoaded.bind(this);
+    xhr.onerror = this._onXhrFailed.bind(this);
+    xhr.onabort = this._onXhrAborted.bind(this);
+    xhr.upload.addEventListener('progress', this._onXhrProgress.bind(this));
 
     // send your stuff to the server
     xhr.send(data);
@@ -151,7 +152,7 @@ Caronte.prototype = {
    */
   _onXhrProgress: function _onXhrProgress(e) {
     var loaded = (e.loaded / this._total).toFixed(2) * 100; // percent
-    this.trigger('progress', loaded, e);
+    this.trigger('progress', ~ ~loaded, e);
     return this;
   },
   /**
@@ -161,9 +162,12 @@ Caronte.prototype = {
    */
   _onXhrLoaded: function _onXhrLoaded(e) {
 
-    var request = e.target;
+    var xhr = e.target;
 
-    if (request.status >= 200 && request.status < 400) this.trigger('success', e);else this.trigger('error', e);
+    if (xhr.readyState !== 4) return this;
+
+    if (xhr.status >= 200 && xhr.status < 400) this.trigger('success', JSON.parse(xhr.responseText));else this.trigger('error', xhr);
+
     return this;
   },
   /**
@@ -172,7 +176,8 @@ Caronte.prototype = {
   * @return { self }
   */
   _onXhrFailed: function _onXhrFailed(e) {
-    this.trigger('error', e);
+    this.trigger('error', e.target);
+    return this;
   },
   /**
   * On ajax request loaded
@@ -180,7 +185,8 @@ Caronte.prototype = {
   * @return { self }
   */
   _onXhrAborted: function _onXhrAborted(e) {
-    this.trigger('aborted', e);
+    this.trigger('aborted', e.target);
+    return this;
   },
   /**
    * Get the form element bound to
