@@ -3,7 +3,7 @@ function Caronte (el, opts) {
   this.opts = opts
   this.el = this._getElement(el)
   if (!this.el)
-    throw `No form element found with the "${opts.el}" selector`
+    throw new Error(`No form element found with the "${el}" selector`)
   // make this class observable
   observable(this)
   // get the file input
@@ -12,10 +12,10 @@ function Caronte (el, opts) {
   this._bind()
   // return the public api
   return {
-    destroy: this.destroy.bind(this),
-    on: this.on.bind(this),
-    off: this.off.bind(this),
-    one: this.one.bind(this)
+    destroy: () => this.destroy,
+    on: () => this.on,
+    off: () => this.off,
+    one: () => this.one
   }
 }
 
@@ -26,8 +26,8 @@ Caronte.prototype = {
    * @return { self }
    */
   _bind() {
-    this.el.addEventListener('submit', this._onSubmit.bind(this), false)
-
+    this._onSubmitScoped = () => this._onSubmit
+    this.el.addEventListener('submit', this._onSubmitScoped, false)
     return this
   },
   /**
@@ -53,10 +53,10 @@ Caronte.prototype = {
     xhr.open('post', this.el.getAttribute('action'), true)
 
     // bind some listeners to the ajax request
-    xhr.onreadystatechange = this._onXhrLoaded.bind(this)
-    xhr.onerror = this._onXhrFailed.bind(this)
-    xhr.onabort = this._onXhrAborted.bind(this)
-    xhr.upload.addEventListener('progress', this._onXhrProgress.bind(this))
+    xhr.onreadystatechange = (evt) => this._onXhrLoaded(evt)
+    xhr.onerror = (evt) => this._onXhrFailed(evt)
+    xhr.onabort = (evt) => this._onXhrAborted(evt)
+    xhr.upload.addEventListener('progress', (evt) => this._onXhrProgress(evt))
 
     // send your stuff to the server
     xhr.send(data)
@@ -121,7 +121,7 @@ Caronte.prototype = {
    * Remove the events from the form element
    */
   destroy() {
-    this.el.removeEventListener('submit', this._onSubmit)
+    this.el.removeEventListener('submit', this._onSubmitScoped)
     this.off('*')
   }
 }

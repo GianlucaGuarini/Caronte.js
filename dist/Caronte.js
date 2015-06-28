@@ -82,9 +82,11 @@ var observable = function observable(el) {
   return el;
 };
 function Caronte(el, opts) {
+  var _this = this;
+
   this.opts = opts;
   this.el = this._getElement(el);
-  if (!this.el) throw 'No form element found with the "' + opts.el + '" selector';
+  if (!this.el) throw new Error('No form element found with the "' + el + '" selector');
   // make this class observable
   observable(this);
   // get the file input
@@ -93,10 +95,18 @@ function Caronte(el, opts) {
   this._bind();
   // return the public api
   return {
-    destroy: this.destroy.bind(this),
-    on: this.on.bind(this),
-    off: this.off.bind(this),
-    one: this.one.bind(this)
+    destroy: function destroy() {
+      return _this.destroy;
+    },
+    on: function on() {
+      return _this.on;
+    },
+    off: function off() {
+      return _this.off;
+    },
+    one: function one() {
+      return _this.one;
+    }
   };
 }
 
@@ -107,8 +117,12 @@ Caronte.prototype = {
    * @return { self }
    */
   _bind: function _bind() {
-    this.el.addEventListener('submit', this._onSubmit.bind(this), false);
+    var _this2 = this;
 
+    this._onSubmitScoped = function () {
+      return _this2._onSubmit;
+    };
+    this.el.addEventListener('submit', this._onSubmitScoped, false);
     return this;
   },
   /**
@@ -117,7 +131,7 @@ Caronte.prototype = {
    * @return { self }
    */
   _onSubmit: function _onSubmit(e) {
-    var _this = this;
+    var _this3 = this;
 
     e.preventDefault();
 
@@ -128,17 +142,25 @@ Caronte.prototype = {
 
     // get the total files size
     Array.prototype.forEach.call(this.input.files, function (file) {
-      _this._total += file.size;
+      _this3._total += file.size;
     });
 
     // setup the ajax request
     xhr.open('post', this.el.getAttribute('action'), true);
 
     // bind some listeners to the ajax request
-    xhr.onreadystatechange = this._onXhrLoaded.bind(this);
-    xhr.onerror = this._onXhrFailed.bind(this);
-    xhr.onabort = this._onXhrAborted.bind(this);
-    xhr.upload.addEventListener('progress', this._onXhrProgress.bind(this));
+    xhr.onreadystatechange = function (evt) {
+      return _this3._onXhrLoaded(evt);
+    };
+    xhr.onerror = function (evt) {
+      return _this3._onXhrFailed(evt);
+    };
+    xhr.onabort = function (evt) {
+      return _this3._onXhrAborted(evt);
+    };
+    xhr.upload.addEventListener('progress', function (evt) {
+      return _this3._onXhrProgress(evt);
+    });
 
     // send your stuff to the server
     xhr.send(data);
@@ -200,7 +222,7 @@ Caronte.prototype = {
    * Remove the events from the form element
    */
   destroy: function destroy() {
-    this.el.removeEventListener('submit', this._onSubmit);
+    this.el.removeEventListener('submit', this._onSubmitScoped);
     this.off('*');
   }
 };

@@ -14,6 +14,7 @@ module.exports = function(config) {
           'node_modules/sinon-chai/lib/sinon-chai.js',
           'node_modules/babel-core/external-helpers.js',
           'dist/' + process.env.LIBRARY_NAME + '.js',
+          'test/helpers/*.js',
           'test/specs/*.js',
           'test/runner.js'
       ],
