@@ -1,41 +1,38 @@
-
 function Caronte (el, opts) {
-  this.opts = opts
-  this.el = this._getElement(el)
-  if (!this.el)
-    throw new Error(`No form element found with the "${el}" selector`)
-  // make this class observable
-  observable(this)
-  // get the file input
-  this.input = this.el.querySelector('input[type=file]')
-  // bing the ui events
-  this._bind()
-  // return the public api
-  return {
-    destroy: () => this.destroy,
-    on: () => this.on,
-    off: () => this.off,
-    one: () => this.one
-  }
-}
 
-Caronte.prototype = {
-  constructor: Caronte,
+  /**
+   * Constructor function where we initialize the script internal logic
+   * @return { self }
+   */
+  this._init = () => {
+    this.opts = opts
+    this.el = this._getElement(el)
+    if (!this.el)
+      throw new Error(`No form element found with the "${el}" selector`)
+    // make this class observable
+    observable(this)
+    // get the file input
+    this.input = this.el.querySelector('input[type=file]')
+    // bing the ui events
+    this._bind()
+
+    return this
+  }
+
   /**
    * Bind the submit event to the form element
    * @return { self }
    */
-  _bind() {
-    this._onSubmitScoped = () => this._onSubmit
-    this.el.addEventListener('submit', this._onSubmitScoped, false)
+  this._bind = () => {
+    this.el.addEventListener('submit', this._onSubmit, false)
     return this
-  },
+  }
   /**
    * Callback executed once the form got submitted
    * @param  { Object } e event object
    * @return { self }
    */
-  _onSubmit(e) {
+  this._onSubmit = (e) => {
 
     e.preventDefault()
 
@@ -45,40 +42,38 @@ Caronte.prototype = {
     this._total = 0
 
     // get the total files size
-    Array.prototype.forEach.call(this.input.files, (file) => {
-      this._total += file.size
-    })
+    Array.prototype.forEach.call(this.input.files, (file) => this._total += file.size)
 
     // setup the ajax request
     xhr.open('post', this.el.getAttribute('action'), true)
 
     // bind some listeners to the ajax request
-    xhr.onreadystatechange = (evt) => this._onXhrLoaded(evt)
-    xhr.onerror = (evt) => this._onXhrFailed(evt)
-    xhr.onabort = (evt) => this._onXhrAborted(evt)
-    xhr.upload.addEventListener('progress', (evt) => this._onXhrProgress(evt))
+    xhr.onreadystatechange = this._onXhrLoaded
+    xhr.onerror = this._onXhrFailed
+    xhr.onabort = this._onXhrAborted
+    xhr.upload.addEventListener('progress', this._onXhrProgress)
 
     // send your stuff to the server
     xhr.send(data)
 
     return this
-  },
+  }
   /**
    * Callback executed while the form data get uploaded
    * @param  { Object } e event object
    * @return { self }
    */
-  _onXhrProgress(e) {
+  this._onXhrProgress = (e) => {
     var loaded = (e.loaded / this._total).toFixed(2) * 100 // percent
     this.trigger('progress', ~~loaded, e)
     return this
-  },
+  }
   /**
    * On ajax request loaded
    * @param  { Object } e event object
    * @return { self }
    */
-  _onXhrLoaded(e) {
+  this._onXhrLoaded = (e) => {
 
     var xhr = e.target
 
@@ -90,38 +85,49 @@ Caronte.prototype = {
       this.trigger('error', xhr)
 
     return this
-  },
+  }
    /**
    * On ajax request loaded
    * @param  { Object } e event object
    * @return { self }
    */
-  _onXhrFailed(e) {
+  this._onXhrFailed = (e) => {
     this.trigger('error', e.target)
     return this
-  },
+  }
    /**
    * On ajax request loaded
    * @param  { Object } e event object
    * @return { self }
    */
-  _onXhrAborted(e) {
+  this._onXhrAborted = (e) => {
     this.trigger('aborted', e.target)
     return this
-  },
+  }
   /**
    * Get the form element bound to
    * @param  { Object|String } form DOM node we want to use to upload the files
    * @return { Object } form DOM node
    */
-  _getElement(el) {
-    return typeof el === 'string' ? document.querySelector(el) : el
-  },
+  this._getElement = (elm) => {
+    return typeof elm === 'string' ? document.querySelector(elm) : elm
+  }
   /**
    * Remove the events from the form element
    */
-  destroy() {
-    this.el.removeEventListener('submit', this._onSubmitScoped)
+  this.destroy = () => {
+    this.el.removeEventListener('submit', this._onSubmit)
     this.off('*')
+  }
+
+  // initialize the script
+  this._init()
+
+  // return the public api
+  return {
+    destroy: this.destroy,
+    on: this.on,
+    off: this.off,
+    one: this.one
   }
 }

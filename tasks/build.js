@@ -14,13 +14,13 @@ module.exports = function() {
       core = fs.readFileSync('src/index.js'),
       start = fs.readFileSync('src/wrap/start.frag'),
       end = fs.readFileSync('src/wrap/end.frag'),
-      transpiled = babel.transform(observable + core).code
+      transpiled = babel.transform([observable, core].join('\n')).code
 
   /**
    * Create a promise based on the result of the webpack compiling script
    */
 
-  return utils.exec('mkdir', ['dist']).then(function(){
+  return utils.exec('mkdir', ['dist']).then(function() {
     fs.writeFileSync(
       path.join('dist', global.library) + '.js',
       // concat
