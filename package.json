@@ -1,6 +1,6 @@
 {
   "name": "caronte-js",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1-beta",
   "description": "Simple javascript ajax file uploader script made for the modern browsers",
   "main": "index.js",
   "scripts": {
