@@ -65,7 +65,7 @@ uploader.on('abort', function(res) {
 - `off([string, function])`: stop listening any Caronte.js event
 - `destroy`: destroy a Caronte.js instance killing all its events listeners
 
-#Credits
+# Credits
 
 Logo by [bubachop](http://bubachop.deviantart.com/)
 
