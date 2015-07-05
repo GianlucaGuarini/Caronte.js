@@ -7,10 +7,10 @@
 ![Caronte logo](logo.png "Caronte logo")
 
 
-> Portitor has horrendus aquas et flumina servat
-terribili squalore Charon, cui plurima mento
-canities inculta iacet, stant lumina flamma,
-sordidus ex umeris nodo dependet amictus.
+> Portitor has horrendus aquas et flumina servat<br>
+terribili squalore Charon, cui plurima mento<br>
+canities inculta iacet, stant lumina flamma,<br>
+sordidus ex umeris nodo dependet amictus.<br>
 _Aeneid 6.298–301_
 
 # Installation
