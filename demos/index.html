@@ -8,16 +8,28 @@
   <form enctype="multipart/form-data" action="php/index.php" method="post">
     <input name="files[]" type="file" multiple>
     <button type="submit">Send</button>
+    <progress value="0" max="100"></progress>
+    <ul class="files-list">
+    </ul>
   </form>
   <script src="../dist/Caronte.js"></script>
   <script>
-    var uploader = new Caronte('form')
+
+    var uploader = new Caronte('form'),
+        progress = document.querySelector('progress'),
+        filesList = document.querySelector('.files-list')
+
     uploader.on('progress', function(perc){
-      console.log(perc)
+      progress.value = perc
     })
     uploader.on('success', function(res){
-      console.log(res)
+      res.files.forEach(function(file){
+        var li = document.createElement('li')
+        li.innerHTML = file
+        filesList.appendChild(li)
+      })
     })
+
   </script>
 </body>
 </html>

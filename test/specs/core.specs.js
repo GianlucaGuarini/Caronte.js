@@ -12,6 +12,7 @@ describe('Core', function() {
     it('All the api\'s methods are available', () => {
       var form = createForm(),
           c
+
       document.body.appendChild(form)
 
       c = new Caronte(form)
